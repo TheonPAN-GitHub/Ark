@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title th:text="#{application.title}">登录若依系统</title>
+    <meta name="description" th:content="#{application.description}">
+    <link href="{% static 'noah/css/bootstrap.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'noah/css/font-awesome.min.css' %}"  rel="stylesheet"/>
+    <link href="{% static 'noah/css/style.min.css' %}"  rel="stylesheet"/>
+    <link href="{% static 'noah/css/login.min.css' %}"  rel="stylesheet"/>
+    <link href="{% static 'noah/noah/css/noah-ui.css' %}"  rel="stylesheet"/>
+    <!-- 360浏览器急速模式 -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="{% static 'noah/favicon.ico'%}" />
+    <style type="text/css">label.error { position:inherit;  }</style>
+    <script>
+        if(window.top!==window.self){alert('未登录或登录超时。请重新登录');window.top.location=window.location};
+    </script>
+</head>
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1><img alt="[ Noah ]" src="{% static 'noah/ruoyi.png' %}"></h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4 th:text="#{login.panel.title}">欢迎使用 若依 后台管理系统</h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> SpringBoot</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Mybatis</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Shiro</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Thymeleaf</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Bootstrap</li>
+                    </ul>
+                    <strong th:if="${@config.getKey('sys.account.registerUser')}">还没有账号？ <a th:href="@{/register}">立即注册&raquo;</a></strong>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <form id="signupForm" autocomplete="off">
+                    <h4 class="no-margins"th:text="#{login.form.title}">登录：</h4>
+                    <p class="m-t-md" th:text="#{login.form.sub-title}">你若不离不弃，我必生死相依</p>
+                    <input type="text"     name="username" class="form-control uname"     th:placeholder="#{login.form.username.placeholder}" value="admin" />
+                    <input type="password" name="password" class="form-control pword"     th:placeholder="#{login.form.password.placeholder}"   value="admin123" />
+					<div class="row m-t" th:if="${captchaEnabled==true}">
+						<div class="col-xs-6">
+						    <input type="text" name="validateCode" class="form-control code" th:placeholder="#{login.form.v-code.placeholder}" maxlength="5" />
+						</div>
+						<div class="col-xs-6">
+							<a href="javascript:void(0);" th:title="#{login.form.captcha.changing.v-code}">
+								<img th:src="@{/captcha/captchaImage(type=${captchaType})}" class="imgcode" width="85%"/>
+							</a>
+						</div>
+					</div>
+                    <div class="checkbox-custom" th:classappend="${captchaEnabled==false} ? 'm-t'">
+				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme" th:text="#{login.form.rememberme}">记住我</label>
+				    </div>
+                    <button class="btn btn-success btn-block" id="btnSubmit" th:data-loading="#{login.form.button.data-loading}" th:text="#{login.form.button.text}">登录</button>
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                Copyright © 2018-2021 ruoyi.vip All Rights Reserved. <br>
+            </div>
+        </div>
+    </div>
+<script th:inline="javascript"> var ctx = [[@{/}]]; var captchaType = [[${captchaType}]]; </script>
+<!--[if lte IE 8]><script>window.location.href=ctx+'html/ie.html';</script><![endif]-->
+<!-- 全局js -->
+<script src="{% static 'noah/js/jquery.min.js' %}"></script>
+<script src="{% static 'noah/js/bootstrap.min.js' %}"></script>
+<!-- 验证插件 -->
+<script src="{% static 'noah/ajax/libs/validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'noah/ajax/libs/validate/messages_zh.min.js' %}" ></script>
+<script src="{% static 'noah/ajax/libs/layer/layer.min.js' %}"></script>
+<script src="{% static 'noah/ajax/libs/blockUI/jquery.blockUI.js' %}"></script>
+<script src="{% static 'noah/noah/js/noah-ui.js' %}"></script>
+<script src="{% static 'noah/noah/login.js' %}"></script>
+<!--<script src="../static/js/jquery.i18n.properties.min.js" th:src="@{/js/jquery.i18n.properties.min.js}"></script>-->
+<!--<script th:inline="javascript">-->
+<!--    var ROOT = [[${#servletContext.contextPath}]];-->
+<!--    var LANG_COUNTRY = [[${#locale.language+'_'+#locale.country}]];-->
+
+<!--    $.i18n.properties({-->
+<!--        path: ROOT + '/i18n',-->
+<!--        name: 'message',-->
+<!--        language: LANG_COUNTRY,-->
+<!--        mode: 'map'-->
+<!--    });-->
+
+<!--&lt;!&ndash;    function i18n(msgKey) {&ndash;&gt;-->
+<!--&lt;!&ndash;		try {&ndash;&gt;-->
+<!--&lt;!&ndash;			return $.i18n.prop(msgKey);&ndash;&gt;-->
+<!--&lt;!&ndash;		} catch (e) {&ndash;&gt;-->
+<!--&lt;!&ndash;			return msgKey;&ndash;&gt;-->
+<!--&lt;!&ndash;		}&ndash;&gt;-->
+<!--&lt;!&ndash;	}&ndash;&gt;-->
+<!--    console.log(ROOT);-->
+<!--    console.log(LANG_COUNTRY);-->
+<!--</script>-->
+</body>
+</html>
